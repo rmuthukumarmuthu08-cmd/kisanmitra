@@ -1,0 +1,111 @@
+{
+  "crops": {
+    "tomato": {"label": "Tomato", "yield_kg_per_acre": 12000, "price_per_kg": 18},
+    "potato": {"label": "Potato", "yield_kg_per_acre": 10000, "price_per_kg": 14},
+    "pepper": {"label": "Bell Pepper / Chili", "yield_kg_per_acre": 8000, "price_per_kg": 40}
+  },
+  "diseases": {
+    "Pepper,_bell___Bacterial_spot": {
+      "crop": "pepper", "name": "Bacterial Spot", "category": "spot", "healthy": false,
+      "name_local": {"hi": "जीवाणु धब्बा", "ta": "பாக்டீரியா புள்ளி", "te": "బాక్టీరియా మచ్చ", "mr": "जिवाणू ठिपका"},
+      "medicine": "Copper Oxychloride 50% WP", "dose": "3 g per litre of water",
+      "frequency": "Every 7 days, 3 sprays", "phi_days": 7, "loss_factor": 0.30, "base_severity": 52,
+      "note": "Bacterial. Use disease-free seed and avoid overhead irrigation."
+    },
+    "Pepper,_bell___healthy": {
+      "crop": "pepper", "name": "Healthy", "category": "healthy", "healthy": true,
+      "name_local": {"hi": "स्वस्थ", "ta": "ஆரோக்கியமான", "te": "ఆరోగ్యకరమైన", "mr": "निरोगी"},
+      "medicine": "None needed", "dose": "-", "frequency": "-", "phi_days": 0, "loss_factor": 0.0, "base_severity": 0,
+      "note": "Plant looks healthy. Keep monitoring weekly."
+    },
+    "Potato___Early_blight": {
+      "crop": "potato", "name": "Early Blight", "category": "blight", "healthy": false,
+      "name_local": {"hi": "अगेती झुलसा", "ta": "இலைக் கருகல்", "te": "ఆకు మచ్చ", "mr": "लवकर करपा"},
+      "medicine": "Mancozeb 75% WP", "dose": "2 g per litre of water",
+      "frequency": "Every 7 days, 3 sprays", "phi_days": 5, "loss_factor": 0.30, "base_severity": 55,
+      "note": "Fungal. Remove lower infected leaves and avoid water stress."
+    },
+    "Potato___Late_blight": {
+      "crop": "potato", "name": "Late Blight", "category": "blight", "healthy": false,
+      "name_local": {"hi": "पछेती झुलसा", "ta": "பிந்தைய கருகல்", "te": "ఆలస్య ఆకుమచ్చ", "mr": "उशिरा करपा"},
+      "medicine": "Cymoxanil + Mancozeb", "dose": "3 g per litre of water",
+      "frequency": "Every 5-7 days", "phi_days": 7, "loss_factor": 0.60, "base_severity": 82,
+      "note": "Very destructive in cool, wet weather. Act fast."
+    },
+    "Potato___healthy": {
+      "crop": "potato", "name": "Healthy", "category": "healthy", "healthy": true,
+      "name_local": {"hi": "स्वस्थ", "ta": "ஆரோக்கியமான", "te": "ఆరోగ్యకరమైన", "mr": "निरोगी"},
+      "medicine": "None needed", "dose": "-", "frequency": "-", "phi_days": 0, "loss_factor": 0.0, "base_severity": 0,
+      "note": "Plant looks healthy. Keep monitoring weekly."
+    },
+    "Tomato___Bacterial_spot": {
+      "crop": "tomato", "name": "Bacterial Spot", "category": "spot", "healthy": false,
+      "name_local": {"hi": "जीवाणु धब्बा", "ta": "பாக்டீரியா புள்ளி", "te": "బాక్టీరియా మచ్చ", "mr": "जिवाणू ठिपका"},
+      "medicine": "Copper Oxychloride + Streptocycline", "dose": "2 g + 0.5 g per litre",
+      "frequency": "Every 7 days, 2 sprays", "phi_days": 7, "loss_factor": 0.30, "base_severity": 50,
+      "note": "Bacterial. Avoid working in the field when leaves are wet."
+    },
+    "Tomato___Early_blight": {
+      "crop": "tomato", "name": "Early Blight", "category": "blight", "healthy": false,
+      "name_local": {"hi": "अगेती झुलसा", "ta": "இலைக் கருகல்", "te": "ఆకు మచ్చ", "mr": "लवकर करपा"},
+      "medicine": "Mancozeb 75% WP", "dose": "2 g per litre of water",
+      "frequency": "Every 7 days, 3 sprays", "phi_days": 5, "loss_factor": 0.35, "base_severity": 62,
+      "note": "Fungal. Mulch soil and remove infected lower leaves."
+    },
+    "Tomato___Late_blight": {
+      "crop": "tomato", "name": "Late Blight", "category": "blight", "healthy": false,
+      "name_local": {"hi": "पछेती झुलसा", "ta": "பிந்தைய கருகல்", "te": "ఆలస్య ఆకుమచ్చ", "mr": "उशिरा करपा"},
+      "medicine": "Copper Oxychloride 50% WP", "dose": "3 g per litre of water",
+      "frequency": "Every 5 days, 3 sprays", "phi_days": 7, "loss_factor": 0.55, "base_severity": 80,
+      "note": "Spreads fast in humid weather. Spray before rain, not during."
+    },
+    "Tomato___Leaf_Mold": {
+      "crop": "tomato", "name": "Leaf Mold", "category": "spot", "healthy": false,
+      "name_local": {"hi": "पत्ती फफूंद", "ta": "இலைப் பூஞ்சை", "te": "ఆకు బూజు", "mr": "पानावरील बुरशी"},
+      "medicine": "Chlorothalonil 75% WP", "dose": "2 g per litre of water",
+      "frequency": "Every 10 days, 2 sprays", "phi_days": 7, "loss_factor": 0.30, "base_severity": 48,
+      "note": "Common in polyhouses. Improve ventilation and reduce humidity."
+    },
+    "Tomato___Septoria_leaf_spot": {
+      "crop": "tomato", "name": "Septoria Leaf Spot", "category": "spot", "healthy": false,
+      "name_local": {"hi": "सेप्टोरिया धब्बा", "ta": "செப்டோரியா புள்ளி", "te": "సెప్టోరియా మచ్చ", "mr": "सेप्टोरिया ठिपका"},
+      "medicine": "Mancozeb 75% WP", "dose": "2.5 g per litre of water",
+      "frequency": "Every 7-10 days, 3 sprays", "phi_days": 7, "loss_factor": 0.35, "base_severity": 58,
+      "note": "Fungal. Remove crop debris after harvest to stop carry-over."
+    },
+    "Tomato___Spider_mites_Two-spotted_spider_mite": {
+      "crop": "tomato", "name": "Spider Mites", "category": "pest", "healthy": false,
+      "name_local": {"hi": "मकड़ी कीट", "ta": "சிலந்தி பூச்சி", "te": "నల్లి పురుగు", "mr": "कोळी किड"},
+      "medicine": "Spiromesifen 22.9% SC (miticide)", "dose": "1 ml per litre of water",
+      "frequency": "Spray on undersides, repeat after 10 days", "phi_days": 5, "loss_factor": 0.35, "base_severity": 60,
+      "note": "A pest, not a disease. Worse in hot, dry weather."
+    },
+    "Tomato___Target_Spot": {
+      "crop": "tomato", "name": "Target Spot", "category": "spot", "healthy": false,
+      "name_local": {"hi": "लक्ष्य धब्बा", "ta": "இலக்கு புள்ளி", "te": "లక్ష్య మచ్చ", "mr": "लक्ष्य ठिपका"},
+      "medicine": "Azoxystrobin 23% SC", "dose": "1 ml per litre of water",
+      "frequency": "Every 10 days, 2 sprays", "phi_days": 7, "loss_factor": 0.30, "base_severity": 52,
+      "note": "Fungal. Rotate fungicide groups to avoid resistance."
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+      "crop": "tomato", "name": "Yellow Leaf Curl Virus", "category": "curl", "healthy": false,
+      "name_local": {"hi": "पीला पत्ती मोड़क विषाणु", "ta": "மஞ்சள் இலை சுருள் நோய்", "te": "పసుపు ఆకు ముడత", "mr": "पिवळा पाने वळणे विषाणू"},
+      "medicine": "Imidacloprid 17.8% SL (whitefly control)", "dose": "0.3 ml per litre of water",
+      "frequency": "Spray + remove and destroy infected plants", "phi_days": 5, "loss_factor": 0.60, "base_severity": 78,
+      "note": "Viral, spread by whiteflies. No cure — control the insect and rogue out sick plants."
+    },
+    "Tomato___Tomato_mosaic_virus": {
+      "crop": "tomato", "name": "Mosaic Virus", "category": "curl", "healthy": false,
+      "name_local": {"hi": "मोज़ेक विषाणु", "ta": "மொசைக் நோய்", "te": "మొజాయిక్ వైరస్", "mr": "मोझॅक विषाणू"},
+      "medicine": "No chemical cure — sanitation", "dose": "-",
+      "frequency": "Remove infected plants; wash hands & tools; control aphids", "phi_days": 0, "loss_factor": 0.45, "base_severity": 66,
+      "note": "Viral. Spreads by touch and tools. Do not smoke near plants (tobacco carries it)."
+    },
+    "Tomato___healthy": {
+      "crop": "tomato", "name": "Healthy", "category": "healthy", "healthy": true,
+      "name_local": {"hi": "स्वस्थ", "ta": "ஆரோக்கியமான", "te": "ఆరోగ్యకరమైన", "mr": "निरोगी"},
+      "medicine": "None needed", "dose": "-", "frequency": "-", "phi_days": 0, "loss_factor": 0.0, "base_severity": 0,
+      "note": "Plant looks healthy. Keep monitoring weekly."
+    }
+  }
+}
