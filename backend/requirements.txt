@@ -1,0 +1,9 @@
+fastapi==0.141.1
+uvicorn[standard]
+python-multipart
+pillow
+numpy<2
+tensorflow-cpu==2.17.1
+# For deployment you can swap tensorflow-cpu for the much smaller tflite-runtime:
+#   pip install tflite-runtime
+# and inference in app/model.py will use it automatically.
