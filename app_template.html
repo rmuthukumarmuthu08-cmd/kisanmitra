@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KisanMitra</title>
+<style>
+:root{
+  --sand:#F4EFE3; --paper:#FBF8F1; --card:#FFFFFF; --ink:#182620; --ink2:#5C6B62;
+  --line:#E7E0D0; --green:#0E5A3C; --leaf:#2E8B57; --lime:#7BB661; --saff:#E08A2B;
+  --saff-l:#FBEEDC; --red:#C6493B; --red-l:#F7E4E0; --amber:#D99A28; --sky:#3E7CB1;
+  --green-l:#E4F0E7;
+  --shadow:0 1px 2px rgba(24,38,32,.04),0 8px 24px -8px rgba(24,38,32,.14);
+  --shadow-lg:0 2px 4px rgba(24,38,32,.05),0 24px 48px -16px rgba(24,38,32,.22);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+html,body{height:100%;}
+body{background:#232b27;font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,sans-serif;
+  color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.device{width:400px;height:840px;max-height:96vh;background:#0b0f0d;border-radius:44px;
+  padding:11px;box-shadow:0 40px 90px -20px rgba(0,0,0,.6),0 0 0 2px #2a322d;position:relative;}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:126px;height:26px;
+  background:#0b0f0d;border-radius:0 0 16px 16px;z-index:60;}
+.app{width:100%;height:100%;background:var(--paper);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column;}
+@media(max-width:440px){body{padding:0;}.device{width:100vw;height:100vh;max-height:100vh;border-radius:0;padding:0;}.app{border-radius:0;}.notch{display:none;}}
+.statusbar{height:44px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 6px;font-size:13px;font-weight:600;flex:none;background:var(--paper);z-index:40;}
+.statusbar .r{display:flex;gap:6px;align-items:center;}
+.view{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;}
+.view::-webkit-scrollbar{display:none;}
+.screen{display:none;padding:8px 20px 28px;min-height:100%;}
+.screen.active{display:block;animation:fade .3s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.brand{display:flex;align-items:center;gap:9px;padding:6px 0 4px;}
+.brand .mark{width:34px;height:34px;flex:none;}
+.brand .name{font-size:19px;font-weight:800;letter-spacing:-.5px;}
+.brand .name b{color:var(--green);}
+.net{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;border:1px solid;color:var(--green);background:var(--green-l);border-color:#c9e3d1;}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--saff);margin:20px 0 6px;}
+h1{font-size:27px;font-weight:800;letter-spacing:-.7px;line-height:1.12;margin-bottom:8px;}
+.lead{color:var(--ink2);font-size:14.5px;line-height:1.5;margin-bottom:8px;}
+.sec-label{font-size:12px;font-weight:700;color:var(--ink2);margin:22px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec-label .step{width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:10px 15px;border-radius:14px;background:var(--card);border:1.5px solid var(--line);font-size:14px;font-weight:600;cursor:pointer;transition:.16s;box-shadow:var(--shadow);}
+.chip small{color:var(--ink2);font-weight:500;font-size:11px;margin-left:5px;}
+.chip.sel{border-color:var(--green);background:var(--green);color:#fff;}
+.chip.sel small{color:#cfe6d8;}
+.crops{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.crop{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px 8px 12px;text-align:center;cursor:pointer;transition:.16s;box-shadow:var(--shadow);}
+.crop .tile{width:46px;height:46px;border-radius:14px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--sand);}
+.crop .cn{font-size:13px;font-weight:700;}
+.crop.sel{border-color:var(--green);}
+.crop.sel .tile{background:var(--green-l);}
+.cta{position:sticky;bottom:0;padding:14px 20px;margin:24px -20px 0;background:linear-gradient(180deg,transparent,var(--paper) 26%);}
+.btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:16px;padding:16px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 10px 24px -8px rgba(14,90,60,.5);transition:.16s;}
+.btn:active{transform:scale(.98);}
+.btn:disabled{background:#d8d1c2;box-shadow:none;cursor:not-allowed;}
+.btn.sec{background:var(--card);color:var(--ink);border:1.5px solid var(--line);box-shadow:var(--shadow);margin-top:10px;}
+.btn.saff{background:var(--saff);box-shadow:0 10px 24px -8px rgba(224,138,43,.5);}
+.camera{border-radius:24px;background:linear-gradient(160deg,#13342a,#0c211b);height:220px;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;box-shadow:var(--shadow-lg);}
+.camera .frame{position:absolute;inset:26px;}
+.camera .frame span{position:absolute;width:26px;height:26px;border:3px solid rgba(255,255,255,.85);}
+.camera .frame .tl{top:0;left:0;border-right:none;border-bottom:none;border-radius:8px 0 0 0;}
+.camera .frame .tr{top:0;right:0;border-left:none;border-bottom:none;border-radius:0 8px 0 0;}
+.camera .frame .bl{bottom:0;left:0;border-right:none;border-top:none;border-radius:0 0 0 8px;}
+.camera .frame .br{bottom:0;right:0;border-left:none;border-top:none;border-radius:0 0 8px 0;}
+.camera .hint{color:rgba(255,255,255,.9);text-align:center;z-index:2;}
+.camera .hint .ci{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+.camera .hint p{font-size:13px;margin-top:2px;opacity:.85;}
+#preview{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;}
+.samples{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
+.sample{background:var(--card);border:1.5px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;transition:.16s;box-shadow:var(--shadow);}
+.sample:active{transform:scale(.97);}
+.sample.sel{border-color:var(--green);}
+.sample img{width:100%;height:66px;object-fit:cover;display:block;}
+.sample .sc{padding:6px 7px 8px;font-size:10.5px;font-weight:600;color:var(--ink2);text-align:center;}
+.scan-wrap{padding:56px 0 20px;text-align:center;}
+.scan{width:160px;height:160px;margin:0 auto 26px;position:relative;border-radius:26px;overflow:hidden;box-shadow:var(--shadow-lg);background:#eef3e9;display:flex;align-items:center;justify-content:center;}
+.scan img{width:100%;height:100%;object-fit:cover;}
+.scan .beam{position:absolute;left:0;right:0;height:56px;background:linear-gradient(180deg,transparent,rgba(14,90,60,.35),transparent);animation:beam 1.3s ease-in-out infinite;}
+@keyframes beam{0%{top:-56px}100%{top:160px}}
+.progress-steps{max-width:290px;margin:0 auto;text-align:left;}
+.pstep{display:flex;align-items:center;gap:12px;padding:9px 0;font-size:14px;color:var(--ink2);opacity:.4;transition:.3s;}
+.pstep .pi{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.pstep.run{opacity:1;color:var(--ink);font-weight:600;}
+.pstep.run .pi{border-color:var(--green);}
+.pstep.done{opacity:1;color:var(--green);}
+.pstep.done .pi{background:var(--green);border-color:var(--green);color:#fff;}
+.hero{background:var(--card);border-radius:24px;padding:18px;box-shadow:var(--shadow-lg);margin-top:14px;position:relative;}
+.hero .badge{position:absolute;top:16px;right:16px;font-size:11px;font-weight:700;color:var(--green);background:var(--green-l);padding:5px 10px;border-radius:20px;}
+.hero .top{display:flex;gap:14px;align-items:center;}
+.hero .lfmini{width:70px;height:70px;border-radius:18px;overflow:hidden;flex:none;background:#eef3e9;}
+.hero .lfmini img{width:100%;height:100%;object-fit:cover;}
+.hero h2{font-size:20px;font-weight:800;letter-spacing:-.4px;padding-right:78px;line-height:1.15;}
+.hero .native{color:var(--ink2);font-size:13px;margin-top:2px;}
+.hero .cropline{font-size:12px;color:var(--saff);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-top:6px;}
+.gauge{display:flex;align-items:center;gap:16px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+.gauge .gtext .gl{font-size:12px;color:var(--ink2);}
+.gauge .gtext .gv{font-size:20px;font-weight:800;}
+.alt{font-size:11.5px;color:var(--ink2);margin-top:12px;padding-top:12px;border-top:1px solid var(--line);}
+.block{background:var(--card);border-radius:22px;padding:6px 18px;box-shadow:var(--shadow);margin-top:14px;}
+.block h3{font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--ink2);padding:16px 0 6px;}
+.line{display:flex;align-items:flex-start;gap:13px;padding:13px 0;border-bottom:1px solid var(--line);}
+.line:last-child{border-bottom:none;}
+.line .li{width:34px;height:34px;border-radius:11px;background:var(--green-l);color:var(--green);flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.line .lt .lk{font-size:12px;color:var(--ink2);}
+.line .lt .lv{font-size:15px;font-weight:700;margin-top:1px;}
+.line .lt .lv small{font-weight:500;color:var(--ink2);font-size:12px;}
+.safety{background:var(--red-l);border-radius:16px;padding:14px;display:flex;gap:11px;margin-top:14px;}
+.safety .si{color:var(--red);flex:none;font-size:18px;}
+.safety p{font-size:12.5px;line-height:1.5;color:#7d3128;}
+.safety b{color:var(--red);}
+.smart{background:linear-gradient(150deg,#0E5A3C,#0a4530);border-radius:24px;padding:20px;margin-top:14px;color:#fff;box-shadow:0 20px 40px -16px rgba(14,90,60,.6);position:relative;overflow:hidden;}
+.smart h3{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--lime);}
+.smart .verdict{font-size:16px;font-weight:700;line-height:1.4;margin:10px 0 16px;}
+.seg{display:flex;background:rgba(255,255,255,.12);border-radius:13px;padding:4px;margin-bottom:16px;}
+.seg div{flex:1;text-align:center;padding:9px;font-size:13px;font-weight:600;border-radius:10px;cursor:pointer;color:rgba(255,255,255,.75);transition:.16s;}
+.seg div.sel{background:#fff;color:var(--green);}
+.money{display:flex;gap:10px;}
+.money div{flex:1;background:rgba(255,255,255,.1);border-radius:14px;padding:13px 8px;text-align:center;}
+.money .mv{font-size:19px;font-weight:800;}
+.money .save .mv{color:#9be3b3;}
+.money .cost .mv{color:#f4c98a;}
+.money small{font-size:10px;opacity:.8;display:block;margin-top:3px;}
+.voice{width:100%;margin-top:14px;background:var(--saff-l);border:1.5px solid #f0d5ad;border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;}
+.voice .vi{width:46px;height:46px;border-radius:50%;background:var(--saff);color:#fff;flex:none;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.voice.speaking .vi{animation:ring 1s infinite;}
+@keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(224,138,43,.5);}50%{box-shadow:0 0 0 12px rgba(224,138,43,0);}}
+.voice .vt b{font-size:15px;font-weight:700;display:block;}
+.voice .vt span{font-size:11.5px;color:var(--ink2);}
+.mapcard{background:var(--card);border-radius:24px;padding:14px;box-shadow:var(--shadow-lg);margin-top:14px;}
+#map{width:100%;border-radius:16px;display:block;}
+.mlegend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--ink2);}
+.mlegend span{display:flex;align-items:center;gap:6px;}
+.md{width:9px;height:9px;border-radius:50%;}
+.mstats{display:flex;gap:10px;margin-top:14px;}
+.mstats div{flex:1;background:var(--sand);border-radius:14px;padding:13px 8px;text-align:center;}
+.mstats .mn{font-size:22px;font-weight:800;color:var(--green);}
+.mstats small{font-size:10.5px;color:var(--ink2);}
+.tabbar{flex:none;display:flex;background:var(--card);border-top:1px solid var(--line);}
+.tab{flex:1;text-align:center;padding:11px 0 10px;color:#A9B3AC;cursor:pointer;font-size:10.5px;font-weight:600;}
+.tab .tabi{font-size:20px;display:block;margin-bottom:1px;}
+.tab.sel{color:var(--green);}
+.disclaimer{font-size:10.5px;color:var(--ink2);text-align:center;padding:16px 24px 4px;line-height:1.5;opacity:.85;}
+#splash{position:absolute;inset:0;background:linear-gradient(160deg,#0E5A3C,#0a3d2b);z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border-radius:34px;transition:opacity .5s,visibility .5s;}
+#splash.hide{opacity:0;visibility:hidden;}
+#splash .slogo{width:84px;height:84px;animation:pop .6s ease;}
+@keyframes pop{from{transform:scale(.6);opacity:0;}to{transform:scale(1);opacity:1;}}
+#splash .stext{color:#fff;font-size:25px;font-weight:800;}
+#splash .stext b{color:var(--lime);}
+#splash .stag{color:rgba(255,255,255,.7);font-size:12.5px;margin-top:-8px;}
+#splash .mload{color:rgba(255,255,255,.6);font-size:11px;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="notch"></div>
+  <div class="app">
+    <div id="splash">
+      <svg class="slogo" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" fill="#0c4a34"/><path d="M50 78c-2-30 10-46 34-52C86 54 74 78 50 78z" fill="#7BB661"/><path d="M50 78c2-30-10-46-34-52C14 54 26 78 50 78z" fill="#2E8B57"/><path d="M50 78V30" stroke="#0c4a34" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <div class="stext">Kisan<b>Mitra</b></div>
+      <div class="stag">On-device crop doctor — offline, in your language</div>
+      <div class="mload" id="mload">loading AI model…</div>
+    </div>
+    <div class="statusbar"><span>9:41</span><div class="r">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="#182620"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+      <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="21" height="11" rx="3" stroke="#182620" stroke-opacity=".4"/><rect x="3" y="3" width="16" height="7" rx="1.5" fill="#182620"/></svg>
+    </div></div>
+
+    <div class="view" id="view">
+      <!-- SETUP -->
+      <section id="s-setup" class="screen active">
+        <div class="brand">
+          <svg class="mark" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" fill="#E4F0E7"/><path d="M50 78c-2-30 10-46 34-52C86 54 74 78 50 78z" fill="#7BB661"/><path d="M50 78c2-30-10-46-34-52C14 54 26 78 50 78z" fill="#2E8B57"/><path d="M50 78V30" stroke="#0E5A3C" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <span class="name">Kisan<b>Mitra</b></span>
+          <span class="net">✓ On-device AI</span>
+        </div>
+        <div class="eyebrow">Welcome, farmer</div>
+        <h1>Let's check on<br>your crop.</h1>
+        <p class="lead">Snap a leaf, get the disease and exact treatment — spoken in your language. The AI runs inside the phone, no internet.</p>
+        <div class="sec-label"><span class="step">1</span> Choose your language</div>
+        <div class="chips" id="langGrid"></div>
+        <div class="sec-label"><span class="step">2</span> Which crop?</div>
+        <div class="crops" id="cropGrid"></div>
+        <div class="cta"><button class="btn" id="setupBtn" disabled onclick="goCapture()">Continue →</button></div>
+      </section>
+
+      <!-- CAPTURE -->
+      <section id="s-capture" class="screen">
+        <div class="eyebrow">Step 3 · Scan</div>
+        <h1 id="capTitle">Photograph the leaf</h1>
+        <p class="lead">Fill the frame with the affected leaf, or tap a real sample below.</p>
+        <div class="camera" onclick="document.getElementById('file').click()">
+          <div class="frame"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+          <div class="hint" id="camHint"><div class="ci">📷</div><b style="font-size:14px">Tap to open camera</b><p>or upload a photo</p></div>
+          <img id="preview" alt="">
+        </div>
+        <input type="file" id="file" accept="image/*" capture="environment" style="display:none" onchange="onFile(event)">
+        <div class="sec-label" style="margin-top:20px">Real sample leaves (from the dataset)</div>
+        <div class="samples" id="sampleGrid"></div>
+        <div class="cta">
+          <button class="btn" id="analyzeBtn" disabled onclick="analyze()">Diagnose with AI 🔬</button>
+          <button class="btn sec" onclick="show('s-setup')">Back</button>
+        </div>
+      </section>
+
+      <!-- ANALYZING -->
+      <section id="s-analyze" class="screen">
+        <div class="scan-wrap">
+          <div class="scan"><img id="scanImg" alt=""><div class="beam"></div></div>
+          <div class="progress-steps" id="steps">
+            <div class="pstep" data-i="0"><span class="pi"></span>Reading image on device</div>
+            <div class="pstep" data-i="1"><span class="pi"></span>Running disease model (CNN)</div>
+            <div class="pstep" data-i="2"><span class="pi"></span>Checking crop &amp; weather</div>
+            <div class="pstep" data-i="3"><span class="pi"></span>Calculating treatment &amp; savings</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULT -->
+      <section id="s-result" class="screen">
+        <div class="hero">
+          <span class="badge" id="rConf">—</span>
+          <div class="top">
+            <div class="lfmini"><img id="rImg" alt=""></div>
+            <div><h2 id="rDisease">—</h2><div class="native" id="rNative"></div><div class="cropline" id="rCrop"></div></div>
+          </div>
+          <div class="gauge">
+            <svg id="gaugeSvg" width="72" height="72" viewBox="0 0 72 72"></svg>
+            <div class="gtext"><div class="gl">Infection severity</div><div class="gv" id="rSev">—</div></div>
+          </div>
+          <div class="alt" id="rAlt"></div>
+        </div>
+        <div class="block">
+          <h3>Treatment plan</h3>
+          <div class="line"><span class="li">💊</span><div class="lt"><div class="lk">Medicine to spray</div><div class="lv" id="rMed"></div></div></div>
+          <div class="line"><span class="li">⚖️</span><div class="lt"><div class="lk">Correct dosage</div><div class="lv" id="rDose"></div></div></div>
+          <div class="line"><span class="li">🔁</span><div class="lt"><div class="lk">How often</div><div class="lv" id="rFreq"></div></div></div>
+          <div class="line"><span class="li">🌾</span><div class="lt"><div class="lk">Safe to harvest after</div><div class="lv" id="rPhi"></div></div></div>
+          <div class="safety"><span class="si">🛡️</span><p id="rWarn"></p></div>
+        </div>
+        <div class="smart">
+          <h3>Smart recommendation</h3>
+          <div class="verdict" id="rVerdict">—</div>
+          <div class="seg"><div class="sel" data-rain="0" onclick="setRain(0)">☀ Dry 2 days</div><div data-rain="1" onclick="setRain(1)">🌧 Rain tomorrow</div></div>
+          <div class="money"><div class="save"><div class="mv" id="rSave">₹0</div><small>crop saved</small></div><div class="cost"><div class="mv" id="rCost">₹0</div><small>treatment cost</small></div><div><div class="mv" id="rNet">₹0</div><small>net benefit</small></div></div>
+        </div>
+        <div class="voice" id="voiceBtn" onclick="speakAdvice()"><span class="vi">🔊</span><div class="vt"><b id="voiceLabel">Listen to advice</b><span id="voiceSub">Spoken in your language · offline</span></div></div>
+        <div style="margin-top:14px">
+          <button class="btn saff" onclick="addToMap()">📍 Report to community map</button>
+          <button class="btn sec" onclick="show('s-capture')">Diagnose another leaf</button>
+        </div>
+      </section>
+
+      <!-- ERROR -->
+      <section id="s-error" class="screen">
+        <div style="padding:56px 8px 16px;text-align:center;">
+          <div style="width:88px;height:88px;border-radius:50%;background:var(--red-l);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:40px;">🚫</div>
+          <h1 style="font-size:22px;">Can't read this photo</h1>
+          <p class="lead" id="errMsg" style="max-width:300px;margin:10px auto 0;"></p>
+          <div style="margin-top:14px;background:var(--saff-l);border:1px solid #f0d5ad;border-radius:14px;padding:12px 14px;text-align:left;font-size:12.5px;color:#7a5320;">
+            <b>Tips for a good photo:</b> one leaf filling the frame · good daylight · plain background · hold steady &amp; close.
+          </div>
+        </div>
+        <div style="padding:0 4px;">
+          <button class="btn" onclick="show('s-capture')">📷 Try another photo</button>
+          <button class="btn sec" id="errGuess" style="display:none" onclick="showBestGuess()">Show best guess anyway</button>
+        </div>
+      </section>
+
+      <!-- MAP -->
+      <section id="s-map" class="screen">
+        <div class="eyebrow">Live network</div>
+        <h1>Outbreak map</h1>
+        <p class="lead">Every diagnosis becomes a sensor — a district-level early-warning system.</p>
+        <div class="mapcard"><canvas id="map" width="340" height="240"></canvas>
+          <div class="mlegend"><span><i class="md" style="background:#C6493B"></i>High</span><span><i class="md" style="background:#D99A28"></i>Watch</span><span><i class="md" style="background:#2E8B57"></i>Healthy</span><span><i class="md" style="background:#3E7CB1"></i>You</span></div>
+          <div class="mstats"><div><div class="mn" id="mReports">0</div><small>reports</small></div><div><div class="mn" id="mVillages">0</div><small>villages</small></div><div><div class="mn" id="mAlerts">0</div><small>alerts</small></div></div>
+        </div>
+      </section>
+      <div class="disclaimer" id="disc">HackFusion @ CIT · The trained CNN runs fully in this app. Treatment data is indicative — confirm dosage with a certified agri-expert.</div>
+    </div>
+    <div class="tabbar">
+      <div class="tab sel" id="tab-home" onclick="show('s-setup')"><span class="tabi">🌱</span>Diagnose</div>
+      <div class="tab" id="tab-map" onclick="show('s-map')"><span class="tabi">🗺️</span>Outbreak</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ASSETS = /*__ASSETS__*/ {};
+/* ============ VANILLA-JS CNN INFERENCE ENGINE (runs the trained weights) ============ */
+function b64f32(s){const bin=atob(s);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new Float32Array(u.buffer);}
+let W=null;
+function loadModel(){
+  W=ASSETS.blocks.map(b=>{
+    if(b.type==='conv')return{type:'conv',k:b64f32(b.kernel),KH:b.shape[0],KW:b.shape[1],CIN:b.shape[2],COUT:b.shape[3]};
+    if(b.type==='bn')return{type:'bn',g:b64f32(b.gamma),be:b64f32(b.beta),m:b64f32(b.mean),v:b64f32(b.var),eps:b.eps,C:b.c};
+    return{type:'dense',w:b64f32(b.w),IN:b.shape[0],OUT:b.shape[1],b:b64f32(b.b),act:b.act};
+  });
+}
+function conv(inp,H,Wd,CIN,L){
+  const {k,KH,KW,COUT}=L,pH=(KH-1>>1),pW=(KW-1>>1),out=new Float32Array(H*Wd*COUT);
+  for(let oy=0;oy<H;oy++)for(let ox=0;ox<Wd;ox++){
+    for(let co=0;co<COUT;co++){
+      let s=0;
+      for(let ky=0;ky<KH;ky++){const iy=oy+ky-pH;if(iy<0||iy>=H)continue;
+        for(let kx=0;kx<KW;kx++){const ix=ox+kx-pW;if(ix<0||ix>=Wd)continue;
+          const ib=(iy*Wd+ix)*CIN,kb=((ky*KW+kx)*CIN)*COUT+co;
+          for(let ci=0;ci<CIN;ci++)s+=inp[ib+ci]*k[kb+ci*COUT];
+        }}
+      out[(oy*Wd+ox)*COUT+co]=s;
+    }}
+  return out;
+}
+function bnrelu(x,H,Wd,L){const{g,be,m,v,eps,C}=L;for(let i=0;i<H*Wd;i++){const base=i*C;for(let c=0;c<C;c++){let val=(x[base+c]-m[c])/Math.sqrt(v[c]+eps)*g[c]+be[c];x[base+c]=val>0?val:0;}}return x;}
+function pool(x,H,Wd,C){const oH=H>>1,oW=Wd>>1,out=new Float32Array(oH*oW*C);for(let oy=0;oy<oH;oy++)for(let ox=0;ox<oW;ox++)for(let c=0;c<C;c++){let mx=-1e30;for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){const v=x[(((oy*2+dy)*Wd)+(ox*2+dx))*C+c];if(v>mx)mx=v;}out[(oy*oW+ox)*C+c]=mx;}return out;}
+function predict(inp96){ // Float32Array 96*96*3, normalized [0,1]
+  let x=inp96,H=96,Wd=96,C=3;
+  for(let i=0;i<W.length;i++){const L=W[i];
+    if(L.type==='conv'){x=conv(x,H,Wd,C,L);C=L.COUT;}
+    else if(L.type==='bn'){x=bnrelu(x,H,Wd,L);x=pool(x,H,Wd,C);H>>=1;Wd>>=1;}
+    else if(L.type==='dense'){
+      if(x.length!==L.IN){ // GAP first time
+        const g=new Float32Array(C);for(let p=0;p<H*Wd;p++)for(let c=0;c<C;c++)g[c]+=x[p*C+c];for(let c=0;c<C;c++)g[c]/=H*Wd;x=g;}
+      const o=new Float32Array(L.OUT);
+      for(let j=0;j<L.OUT;j++){let s=L.b[j];for(let k2=0;k2<L.IN;k2++)s+=x[k2]*L.w[k2*L.OUT+j];o[j]=s;}
+      if(L.act==='relu')for(let j=0;j<L.OUT;j++)o[j]=o[j]>0?o[j]:0;
+      else if(L.act==='softmax'){let mx=-1e30;for(const val of o)if(val>mx)mx=val;let sum=0;for(let j=0;j<o.length;j++){o[j]=Math.exp(o[j]-mx);sum+=o[j];}for(let j=0;j<o.length;j++)o[j]/=sum;}
+      x=o;
+    }}
+  return x;
+}
+function imageToInput(imgEl){const cv=document.createElement('canvas');cv.width=96;cv.height=96;const cx=cv.getContext('2d');cx.drawImage(imgEl,0,0,96,96);const d=cx.getImageData(0,0,96,96).data;const out=new Float32Array(96*96*3);for(let i=0;i<96*96;i++){out[i*3]=d[i*4]/255;out[i*3+1]=d[i*4+1]/255;out[i*3+2]=d[i*4+2]/255;}return out;}
+function runModel(imgEl){const probs=predict(imageToInput(imgEl));const idx=Array.from(probs).map((p,i)=>[p,i]).sort((a,b)=>b[0]-a[0]);return idx.slice(0,3).map(([p,i])=>({label:ASSETS.labels[i],conf:p}));}
+
+/* ============ DATA / ADVISORY ============ */
+const KB=ASSETS.kb, DISEASES=KB.diseases, CROPS=KB.crops;
+const LANGS=[{id:'en',native:'English',label:'English',code:'en-IN'},{id:'hi',native:'हिंदी',label:'Hindi',code:'hi-IN'},{id:'ta',native:'தமிழ்',label:'Tamil',code:'ta-IN'},{id:'te',native:'తెలుగు',label:'Telugu',code:'te-IN'},{id:'mr',native:'मराठी',label:'Marathi',code:'mr-IN'}];
+const UICROPS=[{id:'tomato',label:'Tomato',em:'🍅'},{id:'potato',label:'Potato',em:'🥔'},{id:'pepper',label:'Chili/Pepper',em:'🌶️'}];
+const CROP_LOCAL={tomato:{hi:'टमाटर',ta:'தக்காளி',te:'టమాటా',mr:'टोमॅटो'},potato:{hi:'आलू',ta:'உருளைக்கிழங்கு',te:'బంగాళాదుంప',mr:'बटाटा'},pepper:{hi:'मिर्च',ta:'மிளகாய்',te:'మిరప',mr:'मिरची'}};
+const CATEMOJI={blight:'🍂',spot:'🔴',rust:'🟠',curl:'🌀',pest:'🕷️',mottle:'💛',healthy:'✅'};
+function sevWord(s){return s>68?'Severe':s>45?'Moderate':'Mild';}
+function localName(e,l){return (e.name_local&&e.name_local[l])?e.name_local[l]:e.name;}
+function economics(e,crop,sev,area){const c=CROPS[crop];const yv=c.yield_kg_per_acre*c.price_per_kg;const save=Math.round(yv*e.loss_factor*(sev/100)*area);const cost=e.healthy?0:Math.round((340+sev*3)*area);return{save,cost,net:save-cost,yv};}
+function spoken(e,crop,econ,rain,lang){const dn=localName(e,lang),cl=(CROP_LOCAL[crop]&&CROP_LOCAL[crop][lang])||CROPS[crop].label,cost=econ.cost,save=econ.save;
+  if(e.healthy){const m={en:`Good news. Your ${CROPS[crop].label} looks healthy. No spray needed.`,hi:`अच्छी खबर। आपकी ${cl} की फसल स्वस्थ है। छिड़काव की जरूरत नहीं।`,ta:`நல்ல செய்தி. உங்கள் ${cl} ஆரோக்கியமாக உள்ளது. மருந்து தேவையில்லை.`,te:`శుభవార్త. మీ ${cl} ఆరోగ్యంగా ఉంది. మందు అవసరం లేదు.`,mr:`चांगली बातमी. तुमचे ${cl} निरोगी आहे. फवारणीची गरज नाही.`};return m[lang]||m.en;}
+  const tim={en:rain?'Spray this evening before the rain.':'Spray today while it is dry.',hi:rain?'बारिश से पहले आज शाम छिड़काव करें।':'आज छिड़काव करें।',ta:rain?'மழைக்கு முன் இன்று மாலை தெளிக்கவும்.':'இன்று தெளிக்கவும்.',te:rain?'వర్షానికి ముందు ఈ సాయంత్రం పిచికారీ చేయండి.':'ఈరోజు పిచికారీ చేయండి.',mr:rain?'पावसाआधी आज संध्याकाळी फवारा.':'आज फवारा.'};const t=tim[lang]||tim.en;
+  if(lang==='hi')return `आपकी ${cl} की फसल में ${dn} है। ${e.medicine} का ${e.dose} छिड़काव करें। ${t} इसकी लागत लगभग ${cost} रुपये है और यह करीब ${save} रुपये की फसल बचाता है।`;
+  if(lang==='ta')return `உங்கள் ${cl} பயிரில் ${dn} உள்ளது. ${e.medicine} ஐ ${e.dose} தெளிக்கவும். ${t} இதன் செலவு சுமார் ${cost} ரூபாய், சுமார் ${save} ரூபாய் பயிரை சேமிக்கும்.`;
+  if(lang==='te')return `మీ ${cl} పంటలో ${dn} ఉంది. ${e.medicine} ను ${e.dose} పిచికారీ చేయండి. ${t} దీని ఖర్చు సుమారు ${cost} రూపాయలు, సుమారు ${save} రూపాయల పంటను ఆదా చేస్తుంది.`;
+  if(lang==='mr')return `तुमच्या ${cl} पिकात ${dn} आहे. ${e.medicine} चा ${e.dose} फवारा. ${t} याचा खर्च सुमारे ${cost} रुपये आहे आणि सुमारे ${save} रुपयांचे पीक वाचते.`;
+  return `Your ${CROPS[crop].label} has ${e.name}, ${sevWord(e.base_severity).toLowerCase()}. Spray ${e.medicine}, ${e.dose}. ${t} It costs about ${cost} rupees and saves around ${save} rupees of your crop.`;}
+
+/* ============ STATE + UI ============ */
+let state={lang:'en',crop:'tomato',preds:null,imgSrc:null,rain:0};
+let mapReports=[];
+const langGrid=document.getElementById('langGrid');
+LANGS.forEach((l,i)=>{const d=document.createElement('div');d.className='chip'+(i===0?' sel':'');d.innerHTML=`${l.native}<small>${l.label}</small>`;d.onclick=()=>{state.lang=l.id;[...langGrid.children].forEach(c=>c.classList.remove('sel'));d.classList.add('sel');chk();};langGrid.appendChild(d);});
+const cropGrid=document.getElementById('cropGrid');
+UICROPS.forEach((c,i)=>{const d=document.createElement('div');d.className='crop'+(i===0?' sel':'');d.innerHTML=`<div class="tile">${c.em}</div><div class="cn">${c.label}</div>`;d.onclick=()=>{state.crop=c.id;[...cropGrid.children].forEach(x=>x.classList.remove('sel'));d.classList.add('sel');chk();};cropGrid.appendChild(d);});
+function chk(){document.getElementById('setupBtn').disabled=!(state.lang&&state.crop);}
+chk();
+function buildSamples(){const g=document.getElementById('sampleGrid');g.innerHTML='';ASSETS.samples.forEach(s=>{const e=DISEASES[s.label];const el=document.createElement('div');el.className='sample';el.innerHTML=`<img src="data:image/png;base64,${s.png}"><div class="sc">${e.name}</div>`;el.onclick=()=>{state.imgSrc='data:image/png;base64,'+s.png;document.getElementById('preview').style.display='none';document.getElementById('camHint').style.display='block';document.getElementById('analyzeBtn').disabled=false;[...g.children].forEach(x=>x.classList.remove('sel'));el.classList.add('sel');};g.appendChild(el);});}
+function goCapture(){buildSamples();show('s-capture');}
+function onFile(e){const f=e.target.files[0];if(!f)return;const url=URL.createObjectURL(f);const img=document.getElementById('preview');img.src=url;img.style.display='block';document.getElementById('camHint').style.display='none';state.imgSrc=url;document.getElementById('analyzeBtn').disabled=false;[...document.getElementById('sampleGrid').children].forEach(x=>x.classList.remove('sel'));}
+
+function leafiness(inp){ // fraction of green/brown (leaf-coloured) pixels
+  let veg=0;const n=inp.length/3;
+  for(let i=0;i<n;i++){const r=inp[i*3],g=inp[i*3+1],b=inp[i*3+2];
+    const green=(g>r+0.02&&g>b+0.02);
+    const brown=(r>=g&&g>=b&&r>0.20&&r<0.80&&(r-b)>0.05);
+    if(green||brown)veg++;}
+  return veg/n;
+}
+function classify(imgEl){
+  const inp=imageToInput(imgEl);
+  const probs=predict(inp);
+  const arr=Array.from(probs).map((p,i)=>[p,i]).sort((a,b)=>b[0]-a[0]);
+  const preds=arr.slice(0,3).map(([p,i])=>({label:ASSETS.labels[i],conf:p}));
+  return {preds,maxConf:preds[0].conf,leaf:leafiness(inp)};
+}
+function analyze(){
+  if(!state.imgSrc)return;
+  document.getElementById('scanImg').src=state.imgSrc;show('s-analyze');
+  const steps=[...document.querySelectorAll('#steps .pstep')];steps.forEach(s=>s.className='pstep');
+  state.result=null;state.err=null;
+  const img=new Image();
+  img.onload=()=>{try{state.result=classify(img);}catch(e){state.err="Could not process this image. Please upload a clear leaf photo.";}};
+  img.onerror=()=>{state.err="Could not open this file. Please choose a photo (JPG or PNG).";};
+  img.src=state.imgSrc;
+  let i=0;const run=()=>{if(i>0)steps[i-1].className='pstep done';if(i<steps.length){steps[i].className='pstep run';i++;setTimeout(run,470);}else finishAnalyze();};run();
+}
+function finishAnalyze(){ // always resolves: result, error, or timeout
+  const t0=performance.now();
+  const wait=()=>{
+    if(state.result||state.err)decide();
+    else if(performance.now()-t0>4000){state.err="Timed out reading the image. Please try again.";decide();}
+    else setTimeout(wait,120);
+  };wait();
+}
+function decide(){
+  if(state.err){showError(state.err,false);return;}
+  const {leaf,maxConf}=state.result;
+  if(leaf<0.10){showError("This doesn't look like a crop leaf. Please upload a clear, close-up photo of a single affected leaf.",false);return;}
+  if(maxConf<0.40){showError("I couldn't confidently identify a disease. Make sure one leaf fills the frame in good light, then try again.",true);return;}
+  state.preds=state.result.preds;showResult();
+}
+function showError(msg,allowGuess){document.getElementById('errMsg').textContent=msg;document.getElementById('errGuess').style.display=allowGuess?'flex':'none';show('s-error');}
+function showBestGuess(){if(state.result){state.preds=state.result.preds;showResult();}}
+function showResult(){
+  const preds=state.preds,top=preds[0],e=DISEASES[top.label],crop=e.crop,conf=top.conf;
+  const sev=e.healthy?0:Math.round(e.base_severity*(0.6+0.4*conf));
+  state.cur={e,crop,sev,conf};
+  document.getElementById('rImg').src=state.imgSrc;
+  document.getElementById('rDisease').textContent=e.name;
+  document.getElementById('rNative').textContent=state.lang!=='en'?localName(e,state.lang):'';
+  document.getElementById('rCrop').textContent=CROPS[crop].label;
+  document.getElementById('rConf').textContent=(conf*100).toFixed(1)+'% confidence';
+  drawGauge(sev);
+  document.getElementById('rSev').textContent=e.healthy?'Healthy':sevWord(sev)+' · '+sev+'%';
+  const alt=preds[1]?`Also considered: ${DISEASES[preds[1].label].name} (${(preds[1].conf*100).toFixed(0)}%)`:'';
+  document.getElementById('rAlt').textContent=alt;
+  document.getElementById('rMed').textContent=e.medicine;
+  document.getElementById('rDose').textContent=e.dose;
+  document.getElementById('rFreq').textContent=e.frequency;
+  document.getElementById('rPhi').innerHTML=e.healthy?'—':e.phi_days+' days <small>(pre-harvest interval)</small>';
+  document.getElementById('rWarn').innerHTML=e.healthy?('✅ '+e.note):('<b>Safety:</b> No harvest for '+e.phi_days+' days after spraying. Wear a mask and gloves. Never exceed the dose — extra chemical harms the crop, soil and your health.');
+  document.getElementById('voiceLabel').textContent={en:'Listen to advice',hi:'सलाह सुनें',ta:'ஆலோசனையைக் கேளுங்கள்',te:'సలహా వినండి',mr:'सल्ला ऐका'}[state.lang];
+  document.getElementById('voiceSub').textContent='Spoken in '+LANGS.find(l=>l.id===state.lang).label+' · offline';
+  updateEcon();show('s-result');
+}
+function drawGauge(v){const c=v>68?'#C6493B':v>45?'#D99A28':'#2E8B57',r=30,circ=2*Math.PI*r,off=circ*(1-v/100);document.getElementById('gaugeSvg').innerHTML=`<circle cx="36" cy="36" r="${r}" fill="none" stroke="#EDE6D6" stroke-width="8"/><circle cx="36" cy="36" r="${r}" fill="none" stroke="${c}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" transform="rotate(-90 36 36)"><animate attributeName="stroke-dashoffset" from="${circ}" to="${off}" dur="0.9s" fill="freeze"/></circle><text x="36" y="41" text-anchor="middle" font-size="16" font-weight="800" fill="${c}">${v}</text>`;}
+function setRain(r){state.rain=r;document.querySelectorAll('.seg div').forEach(w=>w.classList.toggle('sel',+w.dataset.rain===r));updateEcon();}
+function updateEcon(){const{e,crop,sev}=state.cur;const econ=economics(e,crop,sev,1);state.econ=econ;countTo('rSave',econ.save);countTo('rCost',econ.cost);countTo('rNet',econ.net);
+  document.getElementById('rVerdict').innerHTML=e.healthy?'✅ No disease detected — your crop looks healthy. Keep scouting weekly.':(state.rain?'🌧️ Rain is coming — spray <b>this evening</b> so it soaks in first. Don\'t waste medicine in the rain.':'☀️ Weather is dry — <b>spray today</b>. Acting now protects about ₹'+econ.save.toLocaleString('en-IN')+' of your harvest.');}
+function fmt(n){return n.toLocaleString('en-IN');}
+function countTo(id,val){const el=document.getElementById(id);const t0=performance.now();const step=t=>{const p=Math.min((t-t0)/650,1),ev=1-Math.pow(1-p,3);el.textContent='₹'+fmt(Math.round(val*ev));if(p<1)requestAnimationFrame(step);};requestAnimationFrame(step);}
+function speakAdvice(){const btn=document.getElementById('voiceBtn');if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const{e,crop}=state.cur;const u=new SpeechSynthesisUtterance(spoken(e,crop,state.econ,state.rain,state.lang));const lang=LANGS.find(l=>l.id===state.lang);u.lang=lang.code;u.rate=.9;const vs=window.speechSynthesis.getVoices();const m=vs.find(v=>v.lang===lang.code)||vs.find(v=>v.lang.startsWith(state.lang));if(m)u.voice=m;const sub=document.getElementById('voiceSub');if(!m&&state.lang!=='en')sub.textContent='No '+lang.label+' voice on this device — real app bundles offline '+lang.label+' voice';u.onstart=()=>btn.classList.add('speaking');u.onend=()=>btn.classList.remove('speaking');window.speechSynthesis.speak(u);}
+/* map */
+function seedMap(){const v=[['Peddur',.2,.28],['Rampet',.5,.18],['Nandi',.76,.32],['Kotha',.34,.52],['Guntla',.6,.62],['Warang',.83,.56],['Kurni',.24,.76],['Ongur',.55,.83],['Tenal',.78,.8]];mapReports=v.map((x,i)=>({name:x[0],x:x[1],y:x[2],risk:i%3===0?'high':i%3===1?'watch':'ok'}));drawMap();mstats();}
+function drawMap(){const cv=document.getElementById('map');if(!cv)return;const cx=cv.getContext('2d'),Wc=cv.width,Hc=cv.height;cx.fillStyle='#EEF3E9';cx.fillRect(0,0,Wc,Hc);cx.strokeStyle='#cdddc4';for(let i=1;i<7;i++){cx.beginPath();cx.moveTo(i*Wc/7,0);cx.lineTo(i*Wc/7,Hc);cx.stroke();cx.beginPath();cx.moveTo(0,i*Hc/7);cx.lineTo(Wc,i*Hc/7);cx.stroke();}cx.strokeStyle='#8ab389';cx.lineWidth=2;cx.beginPath();cx.moveTo(24,34);cx.lineTo(Wc-34,22);cx.lineTo(Wc-18,Hc-40);cx.lineTo(48,Hc-22);cx.closePath();cx.stroke();const col={high:'#C6493B',watch:'#D99A28',ok:'#2E8B57',you:'#3E7CB1'};mapReports.forEach(r=>{const x=26+r.x*(Wc-56),y=26+r.y*(Hc-56);if(r.risk==='high'){cx.fillStyle='rgba(198,73,59,.16)';cx.beginPath();cx.arc(x,y,17,0,7);cx.fill();}cx.fillStyle=col[r.risk];cx.beginPath();cx.arc(x,y,5.5,0,7);cx.fill();cx.fillStyle='#5C6B62';cx.font='9px Segoe UI';cx.fillText(r.name,x+8,y+3);});}
+function mstats(){document.getElementById('mReports').textContent=mapReports.length;document.getElementById('mVillages').textContent=new Set(mapReports.map(r=>r.name)).size;document.getElementById('mAlerts').textContent=mapReports.filter(r=>r.risk==='high').length;}
+function addToMap(){mapReports.push({name:'You',x:.44+Math.random()*.12,y:.42+Math.random()*.14,risk:'you'});drawMap();mstats();show('s-map');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');const home=['s-setup','s-capture','s-analyze','s-result','s-error'].includes(id);document.getElementById('tab-home').classList.toggle('sel',home);document.getElementById('tab-map').classList.toggle('sel',id==='s-map');if(id==='s-map')setTimeout(drawMap,60);document.getElementById('view').scrollTo(0,0);}
+/* selftest hook for automated verification */
+window.__selfTest=function(){return ASSETS.samples.map(s=>{const img=new Image();img.src='data:image/png;base64,'+s.png;return{true:s.label,pred:null,_img:img};});};
+window.__predictSample=function(i){return new Promise(res=>{const s=ASSETS.samples[i];const img=new Image();img.onload=()=>{const p=runModel(img);res({true:s.label,pred:p[0].label,conf:p[0].conf});};img.src='data:image/png;base64,'+s.png;});};
+window.__classifyDataURL=function(url,truth){return new Promise(res=>{const img=new Image();img.onload=()=>{const c=classify(img);res({true:truth,pred:c.preds[0].label,conf:c.maxConf,leaf:c.leaf});};img.onerror=()=>res({error:true});img.src=url;});};
+/* boot */
+loadModel();seedMap();
+document.getElementById('mload').textContent='model ready · '+ASSETS.labels.length+' classes';
+setTimeout(()=>document.getElementById('splash').classList.add('hide'),1500);
+</script>
+</body>
+</html>
